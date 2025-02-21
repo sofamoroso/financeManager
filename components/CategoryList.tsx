@@ -1,61 +1,61 @@
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
-  Button,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { CategoryService } from "../categories/CategoryService";
+import React from "react";
 import { CategoryEntity } from "../categories/CategoryEntity";
+import { useCategoriesFunctions } from "../context/CategoryContext";
 
-export default function CategoryList() {
-  const [categoryList, setCategoryList] = React.useState(
-    [] as CategoryEntity[] // Initial state is an empty array
-  );
-
-  // Fetch categories on mount
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const categories = await CategoryService.getCategories(); // Call service to fetch categories
-      setCategoryList(categories);
-    };
-
-    fetchCategories(); // Call fetchCategories when the component is mounted
-  }, []);
+const CategoryList: React.FC = () => {
+  const { categories } = useCategoriesFunctions(); // Get categories from Context (we are destructing here)
 
   // Render each category
-  const renderCategory = ({ item }: { item: CategoryEntity }) => (
+  const renderCategories = ({ item }: { item: CategoryEntity }) => (
     <View>
-      <Text style={styles.text}>{item.title}</Text>{" "}
-      {/* Display category name */}
+      <Text style={styles.itemText}>{item.name}</Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
       <Text>Categories</Text>
-      <FlatList
-        data={categoryList}
-        renderItem={renderCategory}
-        keyExtractor={(item) => item.id.toString()}
-        style={{ flexGrow: 0 }}
-      />
+      {categories.length > 0 ? (
+        <FlatList
+          data={categories}
+          renderItem={renderCategories}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.list}
+        />
+      ) : (
+        <ActivityIndicator size="large" color="#0000ff" />
+      )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    padding: 16,
   },
-  text: {
-    color: "honeydew",
-    backgroundColor: "cornflowerblue",
-    padding: 10,
-    marginBottom: 5,
+  list: {
+    paddingBottom: 16,
+  },
+  item: {
+    padding: 16,
+    backgroundColor: "#f9f9f9",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  itemText: {
+    fontSize: 16,
   },
 });
+
+export default CategoryList;
