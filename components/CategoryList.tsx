@@ -4,6 +4,7 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
+  Button,
 } from "react-native";
 import React from "react";
 import { CategoryEntity } from "../categories/CategoryEntity";
@@ -14,14 +15,15 @@ const CategoryList: React.FC = () => {
 
   // Render each category
   const renderCategories = ({ item }: { item: CategoryEntity }) => (
-    <View>
+    <View style={styles.categoryContainer}>
       <Text style={styles.itemText}>{item.name}</Text>
+      {/* <Button title="X" onPress={}></Button> */}
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <Text>Categories</Text>
+      <Text style={styles.header}>CATEGORIES</Text>
       {categories.length > 0 ? (
         <FlatList
           data={categories}
@@ -39,22 +41,26 @@ const CategoryList: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    padding: 16,
   },
   list: {
     paddingBottom: 16,
   },
-  item: {
+  categoryContainer: {
     padding: 16,
     backgroundColor: "#f9f9f9",
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
     borderRadius: 8,
     marginVertical: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   itemText: {
     fontSize: 16,
+  },
+  header: {
+    fontWeight: "bold",
   },
 });
 

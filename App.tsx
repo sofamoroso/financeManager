@@ -11,10 +11,9 @@ export default function App() {
     <SafeAreaProvider>
       <CategoryProvider>
         <SafeAreaView style={styles.container}>
-          <Text>Helloooo</Text>
+          <Text>Hello, this is my first App</Text>
           <CreateCategory></CreateCategory>
           <CategoryList></CategoryList>
-          {/* <Todo></Todo> */}
           <StatusBar style="auto" />
         </SafeAreaView>
       </CategoryProvider>
@@ -26,9 +25,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    paddingHorizontal: 20,
+    paddingHorizontal: 40,
   },
 });

@@ -27,22 +27,17 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // Add a new category -  call the backend
-  const addCategory = async (title: string) => {
+  // Add a new category, send a request to Service
+  const addCategory = async (name: string) => {
     try {
-      const newCategory = new CategoryEntity(title);
-      const createdCategory = await CategoryService.createCategory(newCategory);
-
-      setCategories((prev) => [...prev, createdCategory]); // Update UI immediately
+      await CategoryService.createCategory(new CategoryEntity(name));
+      const updatedCategories = await CategoryService.getCategories(); // Re-fetch all categories
+      setCategories(updatedCategories); // Update state with fresh data
     } catch (error) {
       console.error("Error creating category:", error);
+      alert("Failed to create category. Please try again.");
     }
   };
-
-  // Fetch categories when the provider is mounted
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   return (
     <CategoryContext.Provider

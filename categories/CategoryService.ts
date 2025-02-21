@@ -4,10 +4,11 @@
 import axios from "axios";
 import { CategoryEntity } from "../categories/CategoryEntity"; // This model has to match the backend entity
 
-const BASE_URL = "http://10.59.162.88:3000/category"; // Backend API endpoint
+const BASE_URL = "http://10.58.131.50:3000/category"; // Backend API endpoint
+// ipconfig
 
 export class CategoryService {
-  // Static method to fetch categories from backend
+  // GET
   static async getCategories(): Promise<CategoryEntity[]> {
     try {
       // Sending a GET request to the API endpoint using axios
@@ -21,7 +22,7 @@ export class CategoryService {
     }
   }
 
-  // Create a new category on the backend
+  // POST
   static async createCategory(
     category: CategoryEntity
   ): Promise<CategoryEntity> {
@@ -37,4 +38,6 @@ export class CategoryService {
       throw new Error("Failed to create category");
     }
   }
+
+  // DELETE
 }

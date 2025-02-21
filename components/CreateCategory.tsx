@@ -15,7 +15,7 @@ const CreateCategory: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Create a new category</Text>
+      <Text style={styles.header}>CREATE A NEW CATEGORY</Text>
       <TextInput
         style={styles.input}
         onChangeText={setNewCategory}
@@ -35,7 +35,6 @@ const CreateCategory: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -45,6 +44,9 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  header: {
+    fontWeight: "bold",
   },
 });
 
