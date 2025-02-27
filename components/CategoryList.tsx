@@ -11,19 +11,28 @@ import { CategoryEntity } from "../categories/CategoryEntity";
 import { useCategoriesFunctions } from "../context/CategoryContext";
 
 const CategoryList: React.FC = () => {
-  const { categories } = useCategoriesFunctions(); // Get categories from Context (we are destructing here)
+  const { categories } = useCategoriesFunctions(); // Get categories from Context (we are destructuring here)
 
   // Render each category
   const renderCategories = ({ item }: { item: CategoryEntity }) => (
     <View style={styles.categoryContainer}>
       <Text style={styles.itemText}>{item.name}</Text>
-      {/* <Button title="X" onPress={}></Button> */}
     </View>
   );
+
+  // const onTest = async () => {
+  //   console.log("test console log", categories);
+  // };
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>CATEGORIES</Text>
+      {/* <Button
+        onPress={onTest}
+        title="test"
+        color="#841584"
+        accessibilityLabel="test"
+      /> */}
       {categories.length > 0 ? (
         <FlatList
           data={categories}

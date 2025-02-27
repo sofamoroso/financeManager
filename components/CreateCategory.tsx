@@ -1,14 +1,20 @@
-import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Button,
+  FlatList,
+} from "react-native";
 import React, { useState } from "react";
 import { useCategoriesFunctions } from "../context/CategoryContext";
 
 const CreateCategory: React.FC = () => {
   const [newCategory, setNewCategory] = useState("");
-  const { addCategory } = useCategoriesFunctions(); // Get addCategory function from Context
+  const { addCategory, categories } = useCategoriesFunctions(); // Get addCategory function from Context
 
   const onAddCategory = async () => {
     if (!newCategory.trim()) return; // Prevent empty categories
-
     await addCategory(newCategory); // Add category through Context API
     setNewCategory(""); // Clear input field after submission
   };
@@ -22,7 +28,6 @@ const CreateCategory: React.FC = () => {
         value={newCategory}
         placeholder="Enter category name"
       />
-
       <Button
         onPress={onAddCategory}
         title="Add category"

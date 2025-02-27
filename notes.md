@@ -17,6 +17,30 @@
 
 - It gets the latest category list from context instead of calling the API directly.
 
-🔹 When the App Starts (Fetching Categories)
+---------------------------------------------------------------------------------------
 
-🔹 When a User Adds a New Category
+📌 FLOW OF DATA: 
+
+Component calls Context function when a button is pressed.
+Context function updates state and calls Service function.
+Service function sends an API request to the backend.
+Backend processes the request and returns data.
+Context updates state, causing UI to refresh automatically
+
+---------------------------------------------------------------------------------------
+
+📌 WHY USING THIS APPROACH?
+
+✅ Separation of Concerns → Each layer has a clear responsibility:
+ - Component → UI logic and user interactions.
+ - Context → Manages state and calls the service.
+ - Service → Handles backend communication.
+ - Backend → Stores and retrieves data.
+
+✅ Scalability → If you need to add new features, you only modify one layer without breaking the others.
+
+✅ Reusability → You can call createCategory() from any component without duplicating logic.
+
+---------------------------------------------------------------------------------------
+
+

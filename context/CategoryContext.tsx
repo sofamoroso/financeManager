@@ -8,26 +8,34 @@ interface CategoryContextType {
   addCategory: (title: string) => Promise<void>;
 }
 
+// 1. Create the context with an initial empty state
 const CategoryContext = createContext<CategoryContextType | undefined>(
   undefined
 );
 
+// 2. CategoryProvider component that will provide the context to the rest of the app
 export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [categories, setCategories] = useState<CategoryEntity[]>([]);
 
-  // Fetch categories from API when the app starts - calls the backend
+  // 2.1 Function to fetch categories from the backend
   const fetchCategories = async () => {
     try {
-      const data = await CategoryService.getCategories(); // .getCategories comes from CategoryService. Call API
-      setCategories(data); // update states
+      const data = await CategoryService.getCategories(); // Fetch categories from service
+      console.log("Categories fetched inside provider:", data); // Debugging log
+      setCategories(data); // Update states
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
 
-  // Add a new category, send a request to Service
+  // 2.2 Call fetchCategories on component mount
+  useEffect(() => {
+    fetchCategories();
+  }, []); // Empty dependency array means this runs only once on mount
+
+  // 2.3 Function to add a new category
   const addCategory = async (name: string) => {
     try {
       await CategoryService.createCategory(new CategoryEntity(name));
@@ -48,7 +56,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Custom hook for easy access
+// 3. Custom hook for easy access
 export const useCategoriesFunctions = () => {
   const context = useContext(CategoryContext);
   if (!context) {
@@ -56,6 +64,7 @@ export const useCategoriesFunctions = () => {
   }
   return context;
 };
+
 // it returns an object that looks like this
 // {
 //   categories: CategoryEntity[], // List of categories

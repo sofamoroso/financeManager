@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import Todo from "./components/Todo";
+import Todo from "./trash/Todo";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import CategoryList from "./components/CategoryList";
 import CreateCategory from "./components/CreateCategory";
