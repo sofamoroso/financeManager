@@ -11,28 +11,29 @@ import { CategoryEntity } from "../categories/CategoryEntity";
 import { useCategoriesFunctions } from "../context/CategoryContext";
 
 const CategoryList: React.FC = () => {
-  const { categories } = useCategoriesFunctions(); // Get categories from Context (we are destructuring here)
+  const { categories, removeCategory } = useCategoriesFunctions(); // Get categories from Context (we are destructuring here)
+
+  const deleteCategory = async (categoryId: number) => {
+    console.log("Deleting category with id:", categoryId);
+    await removeCategory(categoryId);
+  };
 
   // Render each category
   const renderCategories = ({ item }: { item: CategoryEntity }) => (
     <View style={styles.categoryContainer}>
       <Text style={styles.itemText}>{item.name}</Text>
+      <Button
+        onPress={() => deleteCategory(item.id)} //arrow functions for event handlers
+        title="X"
+        color="#841584"
+        accessibilityLabel="delete category"
+      ></Button>
     </View>
   );
-
-  // const onTest = async () => {
-  //   console.log("test console log", categories);
-  // };
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>CATEGORIES</Text>
-      {/* <Button
-        onPress={onTest}
-        title="test"
-        color="#841584"
-        accessibilityLabel="test"
-      /> */}
       {categories.length > 0 ? (
         <FlatList
           data={categories}
@@ -41,7 +42,7 @@ const CategoryList: React.FC = () => {
           contentContainerStyle={styles.list}
         />
       ) : (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>You don't have any categories yet. Add one!</Text>
       )}
     </View>
   );

@@ -1,6 +1,3 @@
-// I'm abstracting the logic for fetching categories from the backend using an HTTP request.
-// This makes the code modular and reusable.
-
 import axios from "axios";
 import { CategoryEntity } from "../categories/CategoryEntity"; // This model has to match the backend entity
 
@@ -13,7 +10,7 @@ export class CategoryService {
     try {
       const response = await axios.get<CategoryEntity[]>(BASE_URL); // Sending a GET request to the API endpoint using axios
 
-      console.log("Service - Categories fetched successfully:", response.data);
+      // console.log("Service - Categories fetched successfully:", response.data);
 
       return response.data; // Axios' response is typically in the form { data: [...] }
     } catch (error) {
@@ -23,15 +20,22 @@ export class CategoryService {
   }
 
   // POST
+  // Service - Create category
   static async createCategory(
     category: CategoryEntity
   ): Promise<CategoryEntity> {
     try {
-      const response = await axios.post<CategoryEntity>(BASE_URL, category, {
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post<CategoryEntity>(
+        BASE_URL,
+        {
+          name: category.name, // Send only the name (NOT the id)
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Error creating category:", error);
@@ -40,4 +44,14 @@ export class CategoryService {
   }
 
   // DELETE
+  static async deleteCategory(categoryId: number): Promise<void> {
+    try {
+      const response = await axios.delete(`${BASE_URL}/${categoryId}`);
+
+      console.log("Category deleted:", response.data);
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      throw new Error("Failed to delete category");
+    }
+  }
 }

@@ -5,7 +5,8 @@ import { CategoryService } from "../categories/CategoryService";
 interface CategoryContextType {
   categories: CategoryEntity[];
   fetchCategories: () => Promise<void>;
-  addCategory: (title: string) => Promise<void>;
+  addCategory: (name: string) => Promise<void>;
+  removeCategory: (id: number) => Promise<void>;
 }
 
 // 1. Create the context with an initial empty state
@@ -23,7 +24,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({
   const fetchCategories = async () => {
     try {
       const data = await CategoryService.getCategories(); // Fetch categories from service
-      console.log("Categories fetched inside provider:", data); // Debugging log
+      // console.log("Categories fetched inside provider:", data); // Debugging log
       setCategories(data); // Update states
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -35,7 +36,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchCategories();
   }, []); // Empty dependency array means this runs only once on mount
 
-  // 2.3 Function to add a new category
+  // 2.3 Function to add a new category and refresh data
   const addCategory = async (name: string) => {
     try {
       await CategoryService.createCategory(new CategoryEntity(name));
@@ -47,9 +48,21 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  // 2.4 Function to delete a category
+  const removeCategory = async (id: number) => {
+    try {
+      await CategoryService.deleteCategory(id);
+      const updatedCategories = await CategoryService.getCategories(); // Re-fetch all categories
+      setCategories(updatedCategories); // Update state with fresh data
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      alert("Failed to delete category. Please try again.");
+    }
+  };
+
   return (
     <CategoryContext.Provider
-      value={{ categories, fetchCategories, addCategory }}
+      value={{ categories, fetchCategories, addCategory, removeCategory }}
     >
       {children}
     </CategoryContext.Provider>
@@ -57,6 +70,12 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({
 };
 
 // 3. Custom hook for easy access
+// it returns an object that looks like this
+// {
+//   categories: CategoryEntity[], // List of categories
+//   fetchCategories: () => Promise<void>,
+//   addCategory: (title: string) => Promise<void>,
+// }
 export const useCategoriesFunctions = () => {
   const context = useContext(CategoryContext);
   if (!context) {
@@ -64,10 +83,3 @@ export const useCategoriesFunctions = () => {
   }
   return context;
 };
-
-// it returns an object that looks like this
-// {
-//   categories: CategoryEntity[], // List of categories
-//   fetchCategories: () => Promise<void>,
-//   addCategory: (title: string) => Promise<void>,
-// }
