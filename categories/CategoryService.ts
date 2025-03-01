@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CategoryEntity } from "../categories/CategoryEntity"; // This model has to match the backend entity
 
-const BASE_URL = "http://10.59.162.92:3000/category"; // Backend API endpoint
+const BASE_URL = "http://192.168.0.189:3000/category"; // Backend API endpoint
 // ipconfig
 
 export class CategoryService {
