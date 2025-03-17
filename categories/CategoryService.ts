@@ -44,11 +44,11 @@ export class CategoryService {
   }
 
   // DELETE
-  static async deleteCategory(categoryId: number): Promise<void> {
+  static async deleteCategory(categoryId: number): Promise<number> {
     try {
-      const response = await axios.delete(`${BASE_URL}/${categoryId}`);
-
-      console.log("Category deleted:", response.data);
+      await axios.delete(`${BASE_URL}/${categoryId}`);
+      console.log("Category deleted:", categoryId);
+      return categoryId; // if i Promise<number> then i have to return a value, so redux can use it
     } catch (error) {
       console.error("Error deleting category:", error);
       throw new Error("Failed to delete category");

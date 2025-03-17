@@ -1,13 +1,14 @@
-import EntryDelete from "./screens/EntryDelete";
-import EntryEdit from "./screens/EntryEdit";
-import EntryList from "./screens/EntryList";
+import EntryDelete from "./screens/entryDelete";
+import EntryEdit from "./screens/entryEdit";
+import EntryList from "./screens/entryList";
 import CategoriesScreen from "./screens/CategoriesScreen";
-
-import { CategoryProvider } from "./context/CategoryContext";
 
 import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+import { store } from "./store/store";
+import { Provider } from "react-redux";
 
 // Define RootStackParamList for TypeScript types
 export type RootStackParamList = {
@@ -54,8 +55,8 @@ const Navigation = createStaticNavigation(BottomTabs);
 
 export default function App() {
   return (
-    <CategoryProvider>
+    <Provider store={store}>
       <Navigation />
-    </CategoryProvider>
+    </Provider>
   );
 }
