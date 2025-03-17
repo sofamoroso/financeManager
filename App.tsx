@@ -7,6 +7,9 @@ import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import { store } from "./store/store";
+import { Provider } from "react-redux";
+
 // Define RootStackParamList for TypeScript types
 export type RootStackParamList = {
   ListEntries: undefined;
@@ -51,5 +54,9 @@ const BottomTabs = createBottomTabNavigator({
 const Navigation = createStaticNavigation(BottomTabs);
 
 export default function App() {
-  return <Navigation />;
+  return (
+    <Provider store={store}>
+      <Navigation />
+    </Provider>
+  );
 }

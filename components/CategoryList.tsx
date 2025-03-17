@@ -1,21 +1,24 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  Button,
-} from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, FlatList, Button } from "react-native";
+import React, { useEffect } from "react";
 import { CategoryEntity } from "../categories/CategoryEntity";
-import { useCategoriesFunctions } from "../context/CategoryContext";
+import { RootStackParamList } from "../App";
+import { useDispatch, UseDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
+import { fetchCategories, deleteCategory } from "../categories/categorySlice";
 
 const CategoryList: React.FC = () => {
-  const { categories, removeCategory } = useCategoriesFunctions(); // Get categories from Context (we are destructuring here)
+  const categories = useSelector(
+    (state: RootState) => state.category.categories
+  );
+  const dispatch = useDispatch<AppDispatch>();
 
-  const deleteCategory = async (categoryId: number) => {
-    console.log("Deleting category with id:", categoryId);
-    await removeCategory(categoryId);
+  // fetch categories on component mount
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]); //Runs only once on mount (without this I get infinite logs from the fetch)
+
+  const handleDelete = (categoryId: number) => {
+    dispatch(deleteCategory(categoryId));
   };
 
   // Render each category
@@ -23,7 +26,7 @@ const CategoryList: React.FC = () => {
     <View style={styles.categoryContainer}>
       <Text style={styles.itemText}>{item.name}</Text>
       <Button
-        onPress={() => deleteCategory(item.id)} //arrow functions for event handlers
+        onPress={() => handleDelete(item.id)} //arrow functions for event handlers
         title="X"
         color="#841584"
         accessibilityLabel="delete category"
@@ -33,8 +36,7 @@ const CategoryList: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>CATEGORIES</Text>
-      {categories.length > 0 ? (
+      {categories && categories.length > 0 ? (
         <FlatList
           data={categories}
           renderItem={renderCategories}
@@ -68,9 +70,6 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
-  },
-  header: {
-    fontWeight: "bold",
   },
 });
 

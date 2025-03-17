@@ -1,22 +1,19 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Button,
-  FlatList,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, Button } from "react-native";
 import React, { useState } from "react";
-import { useCategoriesFunctions } from "../context/CategoryContext";
+import { AppDispatch, RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { createCategory } from "../categories/categorySlice";
+import { CategoryEntity } from "../categories/CategoryEntity";
 
 const CreateCategory: React.FC = () => {
   const [newCategory, setNewCategory] = useState("");
-  const { addCategory, categories } = useCategoriesFunctions(); // Get addCategory function from Context
+  const dispatch = useDispatch<AppDispatch>();
+  const error = useSelector((state: RootState) => state.category.errormessage);
 
   const onAddCategory = async () => {
     if (!newCategory.trim()) return; // Prevent empty categories
-    await addCategory(newCategory); // Add category through Context API
-    setNewCategory(""); // Clear input field after submission
+    const categoryName = new CategoryEntity(newCategory);
+    dispatch(createCategory(categoryName));
   };
 
   return (
